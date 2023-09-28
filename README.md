@@ -1,20 +1,23 @@
-# GodFathers Public Release
+# AI-Driven Python Project Generator - The God Fathers AI software dev team.
 
-GodFathers Public Release symbolizes the inception of an autonomous era in software development. Bridging the genius of gpt4all and OpenAI, this repository is dedicated to Python programming, autonomously generating innovative ideas, engineering prompts into programs, and uploading them to GitHub.
+Generates and refines Python projects based on prompts, using OpenAI-powered insights.
 
-## Vision
-To evolve into a fully autonomous, free-to-run software entity that ideates and autonomously crafts repositories housing project files, thus redefining software development paradigms.
+## Features
+- **Idea Extraction:** Extracts core logic from user inputs.
+- **Code Generation:** Creates base code from extracted logic.
+- **Refinement:** Refines code via iterative feedback.
+- **GitHub Upload:** Uploads final project to GitHub.
 
-## Latest Commit
-- Committer: Drlordbasil
-- Message: Create GodFathersProgram
-- Date: Sep 28, 2023
+## Usage
+1. **initiate_project(idea)**: Kickstarts project generation.
+2. **generate_base_code()**: Constructs initial code structure.
+3. **refine_code()**: Iteratively refines code.
+4. **upload_to_github(repo_name)**: Uploads project to GitHub.
 
-## Repository Structure
-- A scaffold awaiting autonomous architectures.
-
-## Getting Started
-- Clone the repository to witness autonomous coding in action.
-
-## Contribution
-- Embark on this autonomous journey, contributing towards a self-sustained software evolution.
+## Example
+```python
+idea = "Create a web scraper"
+project = initiate_project(idea)
+project.generate_base_code()
+project.refine_code()
+project.upload_to_github("Web-Scraper")
