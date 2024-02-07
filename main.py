@@ -14,7 +14,7 @@ client = client()
 ################
 gpt4 = "gpt-4-1106-preview"
 gpt3 = "gpt-3.5-turbo-1106"
-model = GPT4All("wizardlm-13b-v1.1-superhot-8k.ggmlv3.q4_0.bin")
+#model = GPT4All("wizardlm-13b-v1.1-superhot-8k.ggmlv3.q4_0.bin")
 class Embed4All:
     def __init__(self, n_threads: Optional[int] = None):
         self.gpt4all = GPT4All(model_name='ggml-all-MiniLM-L6-v2-f16.bin', n_threads=n_threads)
@@ -73,7 +73,7 @@ def extract_code(message):
         # Validate the code using ast
         try:
             ast.parse(code)
-            model.generate(f"""
+            generate_completion(f"""
                         
                             \n
                           # refactor this code like
@@ -136,10 +136,9 @@ def read_github_file(repo_url: str) -> str:
 # Create a logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
-# use self as example
-#example = read_local_file("C:/Users/Antho/OneDrive/Desktop/modularizedGF/MainGodFathers.py")
 
-#print(example)
+
+
 class CustomException(Exception):
     """A custom exception for the ErrorResolutionAgent class."""
     pass
