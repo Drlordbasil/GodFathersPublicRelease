@@ -2,7 +2,7 @@
 FROM python:3.9
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /
 
 # Copy the Python script into the container at /app
 COPY godfathersprogram.py 
