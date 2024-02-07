@@ -2,15 +2,18 @@
 
 ##############
 from typing import Union
-
-import ast, json, logging, re, os, subprocess, time, requests, openai, black
+from openai import OpenAI as client
+import ast, json, logging, re, os, subprocess, time, requests, black
 from typing import List, Optional
 from urllib.request import urlopen
 from colorama import Back, Fore, Style, init
 from github import Github, GithubException
 from gpt4all import Embed4All, GPT4All
 from retrying import retry
+client = client()
 ################
+gpt4 = "gpt-4-1106-preview"
+gpt3 = "gpt-3.5-turbo-1106"
 model = GPT4All("wizardlm-13b-v1.1-superhot-8k.ggmlv3.q4_0.bin")
 class Embed4All:
     def __init__(self, n_threads: Optional[int] = None):
@@ -42,7 +45,7 @@ def fix_common_syntax_errors(code: str) -> str:
         if keyword in code and import_statement not in code:
             code = f"{import_statement}\n{code}"
     
-    # Other common fixes can be added here
+    
     
     return code
 
@@ -114,12 +117,11 @@ def extract_code(message):
 # usage:     generated_test = generate_code(program)
 #           print(generated_test)
 def generate_completion(message: str):
-    response = openai.Completion.create(
-    model="gpt-3.5-turbo-instruct",
-    max_tokens = 3000,
+    response = client.chat.completions.create(
+    model=gpt3,
     prompt=message
     )
-    return response['choices'][0]['text']
+    return response.choices[0].message.content
 
 # Initialize colorama
 init(autoreset=True)
@@ -135,7 +137,7 @@ def read_github_file(repo_url: str) -> str:
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 # use self as example
-example = read_local_file("C:/Users/Antho/OneDrive/Desktop/modularizedGF/MainGodFathers.py")
+#example = read_local_file("C:/Users/Antho/OneDrive/Desktop/modularizedGF/MainGodFathers.py")
 
 #print(example)
 class CustomException(Exception):
@@ -219,7 +221,7 @@ class IdeaGenAndGitUploader:
         self.embedder = Embed4All()
 
     def _init_github(self):
-        openai.api_key = self.api_key
+        #openai.api_key = self.api_key
         try:
             self.github = Github(self.github_token)
             self.user = self.github.get_user()
@@ -231,22 +233,14 @@ class IdeaGenAndGitUploader:
         messages = [{"role": "system", "content": system_message}, {"role": "user", "content": user_message}]
         
         def openai_chat() -> Union[str, None]:
-            response = openai.ChatCompletion.create(model="gpt-3.5-turbo-16k", max_tokens=5000, messages=messages)
-            return response['choices'][0]['message']['content']
+            response = client.chat.completions.create(model="gpt-3.5-turbo-16k", max_tokens=5000, messages=messages)
+            return response.choices[0].message.content
 
-        def gpt4all_chat() -> Union[str, None]:
-            with model.chat_session():
-                embedding = self.embedder.embed(f"{system_message}{example}{user_message}{History._load_history}")
-                return model.generate(
-                    prompt=f"You are filling in for openai API issues, you are tasked with taking over their jobs/tasks here: \n role:\n{system_message} \n prompt:\n {user_message}\n if you are coding, make sure you mark down your python code with '''python and '''",
-                    temp=0.7,
-                    max_tokens=2000
-                )
-                
-        try:
-            return openai_chat()
-        except openai.error.RateLimitError:
-            return gpt4all_chat()
+
+        
+        return openai_chat()
+        #except openai.error.RateLimitError:
+            #return gpt4all_chat()
 
     def _is_valid_python(self, source_code: str) -> bool:
         if source_code is None:
