@@ -5,11 +5,11 @@ FROM python:3.9
 WORKDIR /app
 
 # Copy the Python script into the container at /app
-COPY godfathersprogram.py /app/
+COPY godfathersprogram.py 
 
 # Install any needed packages specified in requirements.txt
-COPY requirements.txt /app/
+COPY requirements.txt 
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Command to run the script
-CMD ["python", "./godfathersprogram.py"]
+CMD ["python", "godfathersprogram.py"]
